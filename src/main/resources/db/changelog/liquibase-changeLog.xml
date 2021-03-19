@@ -1,0 +1,95 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Tony C." id="1">
+        <createTable tableName="USER">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="EMAIL" type="varchar(255)(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="PHONE">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PHONE" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="USER_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_PHONE_USER" references="USER(ID)"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="LANDING_PAGE">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="USER_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_LP_USER" references="USER(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="URL" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="LANDING_PAGE_META">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LANDING_PAGE_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_LP_META" references="LANDING_PAGE(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="HIT_COUNT" type="bigint" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="VIDEO">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="URL" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="VIDEO_META">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VIDEO_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_VIDEO_META" references="VIDEO(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="VIEW_COUNT" type="bigint" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="LP_VIDEO_MAP">
+            <column name="LANDING_PAGE_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_LP_VIDEO" references="LANDING_PAGE(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="VIDEO_ID" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_VIDEO_LP" references="VIDEO(ID)" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Tony C." id="2">
+        <dropNotNullConstraint columnDataType="bigint"
+                               columnName="USER_ID"
+                               tableName="LANDING_PAGE"/>
+    </changeSet>
+
+</databaseChangeLog>
